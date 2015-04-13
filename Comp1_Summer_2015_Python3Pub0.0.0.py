@@ -20,19 +20,20 @@ def DisplayWhoseTurnItIs(WhoseTurn):
     print("It is Black's turn")
 
 def GetPieceName(Rank, File, Board):
-  board_info = Board[File][Rank][0]
-  appending_colour = {"B":"Black", "W":"White"," ":" "}
-  piece_colours = appending_colour[board_info]
-
-  board_info_2 = Board[File][Rank][1]
-  appending_names = {"R":"Redum","S":"Sarrum","M":"Marzaz pani","G":"Gisigir","N":"Nabu","E":"Eltu", " ":" "}
-  piece_names = appending_names[board_info_2]
-  return piece_colours,piece_names
+  #Gets the colour of the piece in the board 
+  piece_colour = Board[File][Rank][0]
+  if piece_colour == "W":
+    piece_colour == "White"
+  else:
+    piece_colour == "Black"
+  #Gets the name of the piece in the board
+  piece_name = Board[File][Rank][1]
+  return piece_colour,piece_name
 
 
 def GetTypeOfGame():
   TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
-  return TypeOfGame.lower()[0]
+  return TypeOfGame.upper()[0]
 
 def DisplayWinner(WhoseTurn):
   if WhoseTurn == "W":
@@ -235,15 +236,14 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     Board[FinishRank][FinishFile] = "WM"
     Board[StartRank][StartFile] = "  "
     #Just needs a print statement :D
-    #Thank you for having mercy after that last task QQ 
     print("White Redum promoted to Marzaz Pani")
   elif WhoseTurn == "B" and FinishRank == 8 and Board[StartRank][StartFile][1] == "R":
     Board[FinishRank][FinishFile] = "BM"
     Board[StartRank][StartFile] = "  "
     print("Black Redum promoted to Marzaz Pani")
   else:
-    piece_colour, piece_name = GetPieceName(FinishRank, FinishFile, Board)
-    print("{0} takes {1}".format(piece_colour, piece_name))
+    W_piece_colours, W_piece_names = GetPieceName(FinishRank, FinishFile, Board)
+    print("{0} {1} is taken".format(W_piece_colours, W_piece_names))
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
 
@@ -279,6 +279,7 @@ if __name__ == "__main__":
         MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
+          confirmation = False #opens loop again
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
       MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
       if GameOver:
