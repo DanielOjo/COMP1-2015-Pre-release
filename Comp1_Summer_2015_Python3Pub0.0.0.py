@@ -19,21 +19,40 @@ def DisplayWhoseTurnItIs(WhoseTurn):
   else:
     print("It is Black's turn")
 
-def GetPieceName(Rank, File, Board):
+def GetPieceName(StartRank, StartFile, Board):
   #Gets the colour of the piece in the board 
-  piece_colour = Board[File][Rank][0]
+  piece_colour = Board[StartRank][StartFile][0]
   if piece_colour == "W":
-    piece_colour == "White"
-  else:
-    piece_colour == "Black"
+    piece_colour = "White"
+  elif piece_colour == "B": 
+    piece_colour = "Black" 
   #Gets the name of the piece in the board
-  piece_name = Board[File][Rank][1]
+  piece_name = Board[StartRank][StartFile][1]
+  if piece_name == "R":
+    piece_name = "Redum"
+  elif piece_name == "S":
+    piece_name = "Sarrum"
+  elif piece_name == "M":
+    piece_name = "MarzazPani"
+  elif piece_name == "G":
+    piece_name = "Gisgigir"
+  elif piece_name == "N":
+    piece_name = "Nabu"
+  elif piece_name == "E":
+    piece_name = "Etlu"
   return piece_colour,piece_name
 
 
 def GetTypeOfGame():
-  TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
-  return TypeOfGame.upper()[0]
+  valid = False
+  while not valid: 
+    TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
+    TypeOfGame = TypeOfGame.lower()[0]
+    if TypeOfGame == "y" or TypeOfGame == "n":
+      valid = True
+    else:
+      print("Please enter Y or N")
+  return TypeOfGame
 
 def DisplayWinner(WhoseTurn):
   if WhoseTurn == "W":
@@ -132,7 +151,7 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
   MoveIsLegal = True
   if (FinishFile == StartFile) and (FinishRank == StartRank):
     MoveIsLegal = False
-  elif not(0 < FinishFile < 9) or not( 0 < FinishRank < 9):
+  elif 0 > FinishFile > 9 or 0 > FinishRank > 9: #This is what I added
     MoveIsLegal = False
   else:
     PieceType = Board[StartRank][StartFile][1]
@@ -212,14 +231,16 @@ def GetMove(StartSquare, FinishSquare):
   valid = False
   while not valid:
     FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
-    if FinishSquare <10 or FinishSquare >89:
-      print("Please provide both FILE and RANK for this move")
-    else:
+    if FinishSquare >10 and FinishSquare <89:
       valid = True
+    else:
+      print("Please provide both FILE and RANK for this move")
   return StartSquare, FinishSquare                 
 
-def ConfirmMove(StartSquare, FinishSquare): 
-  print("Move from Rank {0}, File {1} to Rank {2}, File {3}?".format(StartSquare,StartSquare,FinishSquare,FinishSquare))
+def ConfirmMove(StartSquare, FinishSquare):
+  StartSquare = str(StartSquare)
+  FinishSquare = str(FinishSquare)
+  print("Move from Rank {0}, File {1} to Rank {2}, File {3}?".format(StartSquare[1],StartSquare[0],FinishSquare[1],FinishSquare[1]))
   question = input("Confirm move?(Yes/No): ")
   question = question.lower()[0]
   if question == "y":
@@ -242,8 +263,9 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     Board[StartRank][StartFile] = "  "
     print("Black Redum promoted to Marzaz Pani")
   else:
-    W_piece_colours, W_piece_names = GetPieceName(FinishRank, FinishFile, Board)
-    print("{0} {1} is taken".format(W_piece_colours, W_piece_names))
+    piece_colour, piece_name = GetPieceName(FinishRank, FinishFile, Board)
+    if piece_colour == "White" or piece_colour == "Black":
+      print("{0} {1} has been taken".format(piece_colour, piece_name))
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
 
@@ -256,8 +278,7 @@ if __name__ == "__main__":
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    TypeOfGame = GetTypeOfGame()
-    SampleGame = TypeOfGame
+    SampleGame = GetTypeOfGame()
     if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
       SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
@@ -265,13 +286,8 @@ if __name__ == "__main__":
       DisplayBoard(Board)
       DisplayWhoseTurnItIs(WhoseTurn)
       MoveIsLegal = False
-      confirmation = False #This is needed for the loop
       while not(MoveIsLegal):
-        while confirmation == False:
-          StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
-          confirm = ConfirmMove(StartSquare, FinishSquare) 
-          if confirm == True:
-            confirmation = True
+        StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
         StartRank = StartSquare % 10
         StartFile = StartSquare // 10
         FinishRank = FinishSquare % 10
@@ -279,7 +295,9 @@ if __name__ == "__main__":
         MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
-          confirmation = False #opens loop again
+        confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
+        if not confirm:
+          MoveIsLegal = False #restarts the while loop
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
       MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
       if GameOver:
