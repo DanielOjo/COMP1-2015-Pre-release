@@ -142,7 +142,10 @@ if __name__ == "__main__":
         MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
-        confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
+        if not(MoveIsLegal):
+          confirm = True
+        else:
+          confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
         if not confirm:
           MoveIsLegal = False #restarts the while loop
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
@@ -155,7 +158,7 @@ if __name__ == "__main__":
         WhoseTurn = "W"
     PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
-      PlayAgain = chr(ord(PlayAgain) - 32)     
+      PlayAgain = chr(ord(PlayAgain) - 32)
 ```
 ###Task 5 - Game Piece Removal Confirmation
 1. Describe what is returned by the game when a position on the board containing a piece is selected e.g. Board[4][3] (if there where a piece in that position).
@@ -201,8 +204,9 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     print("Black Redum promoted to Marzaz Pani")
   else:
     piece_colour, piece_name = GetPieceName(FinishRank, FinishFile, Board)
+    piece_colour2, piece_name2 = GetPieceName(StartRank, StartFile, Board)
     if piece_colour == "White" or piece_colour == "Black":
-      print("{0} {1} has been taken".format(piece_colour, piece_name))
+      print("{0} {1} has been taken by {2} {3}".format(piece_colour, piece_name, piece_colour2, piece_name2))
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
 ```
@@ -269,6 +273,16 @@ def DisplayBoard(Board):
 When a parameter is passed by reference the variable uses the same memory as the parameter. This means that any changes made to the variable that has been passes will make changes to the variable.
 When a parameter is being passed be value it is making a copy of the value. This means that any changes to the parameter will not change the original value of the variable.
 2. For each function in the program identify the mechanism using to pass each parameter. Note: this task will take a while but it will improve your understanding of the program and by useful for the exam.
+
+|**Data Type**|**Passing Mechanism**|
+|-------------|---------------------|
+|Integer|by value|
+|Float|by value|
+|String|by value|
+|Boolean|by value|
+|List|by reference|
+|Record|by reference|
+
 
 |Function|Parameter(s)|Passing Method|
 |------------------------------------|

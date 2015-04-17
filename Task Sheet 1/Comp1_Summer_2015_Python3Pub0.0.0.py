@@ -264,11 +264,14 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     print("Black Redum promoted to Marzaz Pani")
   else:
     piece_colour, piece_name = GetPieceName(FinishRank, FinishFile, Board)
+    piece_colour2, piece_name2 = GetPieceName(StartRank, StartFile, Board)
     if piece_colour == "White" or piece_colour == "Black":
-      print("{0} {1} has been taken".format(piece_colour, piece_name))
+      print("{0} {1} has been taken by {2} {3}".format(piece_colour, piece_name, piece_colour2, piece_name2))
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
 
+
+  
 
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
@@ -295,7 +298,10 @@ if __name__ == "__main__":
         MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
-        confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
+        if not(MoveIsLegal):
+          confirm = True
+        else:
+          confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
         if not confirm:
           MoveIsLegal = False #restarts the while loop
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
