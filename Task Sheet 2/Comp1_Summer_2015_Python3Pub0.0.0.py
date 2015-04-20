@@ -269,24 +269,23 @@ def display_in_game_options():#Task 12
   print("3. Return to Game")
   print("4. Surrender") #Task 13
 
-def get_option(StartSquare, FinishSquare,WhoseTurn):#Task 12
+def get_option():#Task 12
   print()
-  option = int(input("Please select an option: "))
-  if option == 1: #Save Game
-    pass 
-  elif option == 2: #Quit to Menu
-    display_menu()
-    selection = get_menu_selection()
-    choice = make_selection(selection)
-  elif option == 3: #Return to Game
-    StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
-  elif option == 4: #Task 13
-    if WhoseTurn == "W": 
-      print("White surrendered. Black wins!")
+  valid = False
+  while not valid:
+    option = int(input("Please select an option: "))
+    if option == 1: #Save Game
+      valid = True
+    elif option == 2: #Quit to Menu
+      valid = True
+    elif option == 3: #Return to Game
+      valid = True
+    elif option == 4: #Task 13
+      valid = True
     else:
-      print("Black surrendered. White wins!")
+      print("Please enter a valid option")
+  return valid
   
-
 def GetMove(StartSquare, FinishSquare):
   valid = False
   while not valid:
@@ -363,7 +362,13 @@ def play_game(Board):
         StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
         if StartSquare == -1: #Task 12
           display_in_game_options()
-          options = get_option(StartSquare, FinishSquare,WhoseTurn)
+          options = get_option()
+          if option == 1:
+            pass
+          elif option == 2:
+            pass
+          elif option == 3:
+            pass
         StartRank = StartSquare % 10
         StartFile = StartSquare // 10
         FinishRank = FinishSquare % 10
