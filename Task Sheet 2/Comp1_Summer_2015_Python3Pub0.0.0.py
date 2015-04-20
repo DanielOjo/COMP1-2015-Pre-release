@@ -261,7 +261,7 @@ def InitialiseNewBoard(Board):
         else:
           Board[RankNo][FileNo] = "  "    
 
-def display_in_game_options():
+def display_in_game_options():#Task 12
   print()
   print("Options")
   print("1. Save Game")
@@ -269,7 +269,7 @@ def display_in_game_options():
   print("3. Return to Game")
   print("4. Surrender") #Task 13
 
-def get_option(StartSquare, FinishSquare,WhoseTurn):
+def get_option(StartSquare, FinishSquare,WhoseTurn):#Task 12
   print()
   option = int(input("Please select an option: "))
   if option == 1: #Save Game
@@ -298,7 +298,7 @@ def GetMove(StartSquare, FinishSquare):
     else:
       print("Please provide both FILE and RANK for this move")
   if StartSquare == -1: #I did this so that it would not ask for the Finish Square
-    FinishSquare = " "
+    FinishSquare = FinishSquare
   else:
     valid = False
     while not valid:
