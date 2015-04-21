@@ -280,11 +280,11 @@ def get_option():#Task 12
       valid = True
     elif option == 3: #Return to Game
       valid = True
-    elif option == 4: #Task 13
+    elif option == 4: #Surrender #Task 13
       valid = True
     else:
       print("Please enter a valid option")
-  return valid
+  return option
   
 def GetMove(StartSquare, FinishSquare):
   valid = False
@@ -362,12 +362,14 @@ def play_game(Board):
         StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
         if StartSquare == -1: #Task 12
           display_in_game_options()
-          options = get_option()
+          option = get_option()
           if option == 1:
             pass
           elif option == 2:
             pass
           elif option == 3:
+            pass
+          elif option == 4:
             pass
         StartRank = StartSquare % 10
         StartFile = StartSquare // 10
