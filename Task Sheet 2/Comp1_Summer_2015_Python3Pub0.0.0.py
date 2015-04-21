@@ -43,7 +43,7 @@ def GetPieceName(StartRank, StartFile, Board):
   return piece_colour,piece_name
 
 
-def GetTypeOfGame():
+def GetTypeOfGame(): #Changed in Task 11 Kappa <-- Twitch refrence
   valid = False
   while not valid: 
     TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
@@ -83,7 +83,7 @@ def DisplayBoard(Board):
 def display_menu(): #Task 11
   print("Main Menu")
   print("1. Start new game")
-  print("2. Load exsiting game")
+  print("2. Load existing game")
   print("3. Play sample game")
   print("4. View high scores")
   print("5. Settings")
@@ -103,11 +103,12 @@ def get_menu_selection(): #Task 11
 
 def make_selection(selection): #Task 11
   if selection == 1: #Start new game
+    play_game("N")
     pass 
   elif selection == 2: #Load exsiting game
     pass
   elif selection == 3: #Play sample game
-    sample_game = play_game(Board)
+    play_game("Y")
   elif selection == 4: #View high scores
     pass
   elif selection == 5: #Settings
@@ -170,10 +171,10 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
     CheckNabuMoveIsLegal = True
   return CheckNabuMoveIsLegal
 
-def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
+def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile): #Task 16
   CheckMarzazPaniMoveIsLegal = False
-  if (abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 0) or (abs(FinishFile - StartFile) == 0 and abs(FinishRank - StartRank) ==1):
-    CheckMarzazPaniMoveIsLegal = True
+  if (abs(FinishFile - StartFile) == 1 or (abs(FinishFile - StartFile) == 0)):
+      CheckMarzazPaniMoveIsLegal = True
   return CheckMarzazPaniMoveIsLegal
 
 def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
@@ -341,17 +342,17 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
 
-def play_game(Board):
+def play_game(SampleGame):
   StartSquare = 0 
   FinishSquare = 0
   PlayAgain = "Y"
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    SampleGame = GetTypeOfGame()
+    #SampleGame = GetTypeOfGame()
 
-    if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
-      SampleGame = chr(ord(SampleGame) - 32)
+    #if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
+      #SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
 
     while not(GameOver):
@@ -363,14 +364,20 @@ def play_game(Board):
         if StartSquare == -1: #Task 12
           display_in_game_options()
           option = get_option()
-          if option == 1:
+          if option == 1: #Save Game
             pass
-          elif option == 2:
-            pass
-          elif option == 3:
-            pass
-          elif option == 4:
-            pass
+          elif option == 2: #Quit to Menu
+            pass #This is handled by
+                 #display_menu()and by
+                 #selection = get_menu_selection()
+                 #While loop may be needed in the main program :P
+                 #Maybe function?
+          elif option == 3: #Return to Game
+            #Need to restart it to GetMove(StartSquare, FinishSquare)
+            MoveIsLegal = False #restarts the while loop
+          elif option == 4: #Surrender
+            pass #This will be handled by GameOver
+                 #This will be tricky >_>
         StartRank = StartSquare % 10
         StartFile = StartSquare // 10
         FinishRank = FinishSquare % 10
@@ -378,9 +385,10 @@ def play_game(Board):
         MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
-        confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
-        if not confirm:
-          MoveIsLegal = False #restarts the while loop
+        if MoveIsLegal:
+          confirm = ConfirmMove(StartSquare, FinishSquare) #amending my function
+          if not confirm:
+            MoveIsLegal = False #restarts the while loop
 
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
 
@@ -397,9 +405,11 @@ def play_game(Board):
       PlayAgain = chr(ord(PlayAgain) - 32)
 
 if __name__ == "__main__":
-  Board = CreateBoard() #0th index not used
-  display_menu()#Task 11
-  selection = get_menu_selection()#Task 11
-  choice = make_selection(selection)#Task 11
+  checker = False #Set up this while loop
+  while not checker: # I may need this later
+    Board = CreateBoard() #0th index not used
+    display_menu()#Task 11
+    selection = get_menu_selection()#Task 11
+    choice = make_selection(selection)#Task 11
   
       
