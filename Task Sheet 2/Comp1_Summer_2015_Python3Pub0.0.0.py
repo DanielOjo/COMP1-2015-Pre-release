@@ -116,14 +116,26 @@ def make_selection(selection): #Task 11
   elif selection == 6: #Quit Program
     pass
   
-def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
+def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):#Task 19 #BUG Black piece can only move 2 spaces on first turn
   CheckRedumMoveIsLegal = False
   if ColourOfPiece == "W":
+    if StartRank == 7: #Start of the game
+      if FinishRank == StartRank - 2:
+        if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
+          CheckRedumMoveIsLegal = True
+        elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "B":
+          CheckRedumMoveIsLegal = True
     if FinishRank == StartRank - 1:
       if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
         CheckRedumMoveIsLegal = True
       elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "B":
         CheckRedumMoveIsLegal = True
+  elif StartRank == 2:
+    if FinishRank == StartRank + 2:
+      if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
+        CheckRedumMoveIsLegal = True
+    elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "W":
+      CheckRedumMoveIsLegal = True
   elif FinishRank == StartRank + 1:
     if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
       CheckRedumMoveIsLegal = True
@@ -165,7 +177,7 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
           GisgigirMoveIsLegal = False
   return GisgigirMoveIsLegal
 
-def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
+def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):#17
   CheckNabuMoveIsLegal = False
   if abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 1:
     CheckNabuMoveIsLegal = True
@@ -173,13 +185,15 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile): #Task 16
   CheckMarzazPaniMoveIsLegal = False
-  if (abs(FinishFile - StartFile) == 1 or (abs(FinishFile - StartFile) == 0)):
+  if (abs(FinishFile - StartFile) ==(abs(FinishFile - StartFile) == 0)):
       CheckMarzazPaniMoveIsLegal = True
   return CheckMarzazPaniMoveIsLegal
 
-def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
+def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):#Task 18
   CheckEtluMoveIsLegal = False
-  if (abs(FinishFile - StartFile) == 2 and abs(FinishRank - StartRank) == 0) or (abs(FinishFile - StartFile) == 0 and abs(FinishRank - StartRank) == 2):
+  if (abs(FinishFile - StartFile) == 2 and abs(FinishRank - StartRank) == 1):  
+    CheckEtluMoveIsLegal = True
+  elif (abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 2):
     CheckEtluMoveIsLegal = True
   return CheckEtluMoveIsLegal
 
@@ -341,7 +355,7 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
       print("{0} {1} has taken {2} {3}".format(piece_colour2, piece_name2,piece_colour, piece_name))
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
     Board[StartRank][StartFile] = "  "
-
+    
 def play_game(SampleGame):
   StartSquare = 0 
   FinishSquare = 0
@@ -364,9 +378,11 @@ def play_game(SampleGame):
         if StartSquare == -1: #Task 12
           display_in_game_options()
           option = get_option()
-          if option == 1: #Save Game
+          if option == 1: #Save Game #I need a way to break the while loop after an option has been selected 
             pass
-          elif option == 2: #Quit to Menu
+          elif option == 2:
+            #GameOver = True #<---- Did not break while loop >_>
+            #Quit to Menu
             pass #This is handled by
                  #display_menu()and by
                  #selection = get_menu_selection()
