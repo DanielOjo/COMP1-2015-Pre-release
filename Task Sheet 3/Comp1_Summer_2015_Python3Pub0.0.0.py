@@ -5,6 +5,7 @@
 
 BOARDDIMENSION = 8
 Kashshaptu = False
+  
 def CreateBoard():
   Board = []
   for Count in range(BOARDDIMENSION + 1):
@@ -46,7 +47,7 @@ def GetPieceName(StartRank, StartFile, Board):
   return piece_colour,piece_name
 
 
-def GetTypeOfGame(): #Changed in Task 11 Kappa <-- Twitch refrence
+def GetTypeOfGame(): #Changed in Task 11 
   valid = False
   while not valid: 
     TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
@@ -124,25 +125,29 @@ def make_selection(selection): #Task 11
       print("9. Return to Main Menu")
       question = int(input("Please select setting to change "))
       if question == 1:
-        kashshaptu_state = input("Do you wish to use the Kashshaptu piece (Y/N)? ")
-        kashshaptu_state = kashshaptu_state.lower()
-        if kashshaptu_state == "y":
-          Kashshaptu = True
-          print("Kashshaptu Active")
-          print()
-          display_menu()
-        elif kashshaptu_state == "n":
-          print("Kashshaptu not active")
-          print()
-          display_menu()
-        else:
-          print("please enter Y or N")
+        Kashshaptu = KashshaptuActive()
+        #return Kashshaptu
+        valid = True
       elif question == 9:
         print()
-        display_menu()
-                                                       
+        valid = True        
     elif selection == 6: #Quit Program
       pass
+
+def KashshaptuActive():
+  kashshaptu_state = input("Do you wish to use the Kashshaptu piece (Y/N)? ")
+  kashshaptu_state = kashshaptu_state.lower()
+  if kashshaptu_state == "y":
+    Kashshaptu = True
+    print("Kashshaptu Active")
+    print()
+  elif kashshaptu_state == "n":
+    print("Kashshaptu not active")
+    print()
+  else:
+    print("please enter Y or N")
+
+  return Kashshaptu
   
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):#Task 19 #BUG Black piece can only move 2 spaces on first turn
   CheckRedumMoveIsLegal = False
@@ -307,7 +312,7 @@ def InitialiseNewBoard(Board):
           elif FileNo == 4:
             #Task 21
             if RankNo == 1:
-              Board[RankNo][FileNo] = Board[RankNo][FileNo] + "S" #Added if statement to Swap the M & S round in the Rank = 1
+              Board[RankNo][FileNo] = Board[RankNo][FileNo] + "S" #Added if statement to Swap the M & S round in the Rank = 1 (Where the Black pieces are)
             else:  
               Board[RankNo][FileNo] = Board[RankNo][FileNo] + "M"            
 
@@ -381,9 +386,9 @@ def ConfirmMove(StartSquare, FinishSquare):
   return confirm
   
 
-def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
+def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn, Kashshaptu):
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
-    if Kashshaptu == True: #Task 22 added if statements for when Kashshaptu is active
+    if Kashshaptu: #Task 22 added if statements for when Kashshaptu is active
       Board[FinishRank][FinishFile] = "WK"
       Board[StartRank][StartFile] = "  "
       print("White Redum promoted to Kashshaptu")
@@ -461,7 +466,7 @@ def play_game(SampleGame):
 
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
 
-      MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+      MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn,Kashshaptu)
       if GameOver:
         DisplayWinner(WhoseTurn)
       if WhoseTurn == "W":
@@ -475,10 +480,11 @@ def play_game(SampleGame):
 
 if __name__ == "__main__":
   checker = False #Set up this while loop
-  while not checker: # I may need this later
+  while not checker: # I may need this later #I was right I did need it XD
     Board = CreateBoard() #0th index not used
     display_menu()#Task 11
     selection = get_menu_selection()#Task 11
     choice = make_selection(selection)#Task 11
+    
   
       
