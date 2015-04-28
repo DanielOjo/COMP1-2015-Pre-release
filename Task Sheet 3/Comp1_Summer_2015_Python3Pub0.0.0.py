@@ -5,7 +5,7 @@
 
 BOARDDIMENSION = 8
 Kashshaptu = False
-  
+ 
 def CreateBoard():
   Board = []
   for Count in range(BOARDDIMENSION + 1):
@@ -118,37 +118,32 @@ def make_selection(selection): #Task 11
       valid = True
     elif selection == 4: #View high scores
       pass
-    elif selection == 5: #Settings
-      #Task 22
+    elif selection == 5: #Settings      
       print()
       print("1. Use Kashshaptu Piece")
       print("9. Return to Main Menu")
       question = int(input("Please select setting to change "))
       if question == 1:
-        Kashshaptu = KashshaptuActive()
-        #return Kashshaptu
-        valid = True
+        kashshaptu_state = input("Do you wish to use the Kashshaptu piece (Y/N)? ")
+        kashshaptu_state = kashshaptu_state.lower()
+        if kashshaptu_state == "y":
+          Kashshaptu = True
+          print("Kashshaptu Active")
+          print()
+          valid = True
+        elif kashshaptu_state == "n":
+          print("Kashshaptu not active")
+          print()
+          valid = True
+        else:
+          print("please enter Y or N")
+          valid = True
       elif question == 9:
         print()
-        valid = True        
+        valid = True           
     elif selection == 6: #Quit Program
       pass
-
-def KashshaptuActive():
-  kashshaptu_state = input("Do you wish to use the Kashshaptu piece (Y/N)? ")
-  kashshaptu_state = kashshaptu_state.lower()
-  if kashshaptu_state == "y":
-    Kashshaptu = True
-    print("Kashshaptu Active")
-    print()
-  elif kashshaptu_state == "n":
-    print("Kashshaptu not active")
-    print()
-  else:
-    print("please enter Y or N")
-
-  return Kashshaptu
-  
+ 
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):#Task 19 #BUG Black piece can only move 2 spaces on first turn
   CheckRedumMoveIsLegal = False
   if ColourOfPiece == "W":
@@ -439,7 +434,10 @@ def play_game(SampleGame):
           if option == 1: #Save Game #I need a way to break the while loop after an option has been selected 
             pass
           elif option == 2:
-            #GameOver = True #<---- Did not break while loop >_>
+            MoveIsLegal = True
+            GameOver = True #<---- Did not break while loop >_>
+            PlayAgain == "N"
+            
             #Quit to Menu
             pass #This is handled by
                  #display_menu()and by
@@ -485,6 +483,8 @@ if __name__ == "__main__":
     display_menu()#Task 11
     selection = get_menu_selection()#Task 11
     choice = make_selection(selection)#Task 11
+    
+    
     
   
       
